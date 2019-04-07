@@ -1,0 +1,19 @@
+function [T,U]=EulerDifErr(a,b,N,y0,y,f)
+h=(b-a)/N;
+T=a:h:b;
+U=zeros(1,N+1);
+tho=zeros(1,N+1);
+Err=zeros(1,N+1);
+U(1)=y0;
+for i=1:N
+    ti=T(i);
+    yi=feval(y,ti);
+    Z=[ti,yi];
+    Z_=[ti,U(i)];
+    dy=feval(f,Z);
+    dy_=feval(f,Z_);
+    U(i+1)=U(i)+h*dy_;
+    yi_=feval(y,T(i+1));
+    tho(i+1)=abs(dy-dy_);
+    Err(i+1)=abs(U(i+1)-yi_);
+end
